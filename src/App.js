@@ -1,13 +1,29 @@
+import React, { useContext } from 'react'
+import {BrowserRouter} from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { theme } from './theme'
-import { Box } from '@material-ui/core'
+import Header from './components/Header'
+import AppRouter from './components/AppRouter'
+import { Context } from "./index";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Loader from "./components/Loader";
 
-function App() {
+function App () {
+  const {auth} = useContext(Context)
+  const [user, loading, error] = useAuthState(auth)
+
+  if (loading) {
+    return <Loader/>
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box>Start</Box>
+      <BrowserRouter>
+        <CssBaseline />
+        <Header />
+        <AppRouter />
+      </BrowserRouter>
     </ThemeProvider>
   )
 }
